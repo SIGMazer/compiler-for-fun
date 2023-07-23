@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
         exit(1);
     }
     scan(&Token);
-    n = binexpr();
+    n = binexpr(0);
     printf("%d", interpretAST(n));
     return EXIT_SUCCESS;
 }

@@ -5,7 +5,7 @@
 
 // Tokens
 enum {
-    T_PLUS, T_MINUS, T_STAR, T_SLASH, T_INT, T_EOF
+    T_EOF, T_PLUS, T_MINUS, T_STAR, T_SLASH, T_INT
 };
 
 // ASP node type 

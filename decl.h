@@ -8,6 +8,6 @@ struct ASTnode *mkastleaf(int op, int intvalue);
 
 struct ASTnode *mkastunary(int op, int intvalue, struct ASTnode *left);
 
-struct ASTnode *binexpr();
+struct ASTnode *binexpr(int ptp);
 
 int interpretAST(struct ASTnode *node);

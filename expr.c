@@ -4,6 +4,21 @@
 
 
 
+// OPerator precedence for each token 
+//                    EOF  +  -   *   /  INT
+static int OpPrec[] = {0, 10, 10, 20, 20, 0};
+
+// this function check that we have binary operator 
+// and manage syntax error 
+static int op_precedence(int tokentype) {
+  int prec = OpPrec[tokentype];
+  if (prec == 0) {
+    fprintf(stderr, "syntax error on line %d, token %d\n", Line, tokentype);
+    exit(1);
+  }
+  return (prec);
+}
+
 // Convert a token into an AST operation.
 int arithop(int tok) {
   switch (tok) {
@@ -39,28 +54,36 @@ static struct ASTnode *primary(){
     }
 }
 
-struct ASTnode *binexpr(){
+struct ASTnode *binexpr(int ptp){
     struct ASTnode *node, *left, *right;
     int nodetype;
     
     // Get the interger in left and fetch next token 
-    left = primary();
+    left = primary();    
 
+    nodetype = Token.token;
     // return just left if no left node
-    if(Token.token == T_EOF){
+    if(nodetype == T_EOF){
         return left;
     }
-
-    // convert token to node type 
-    nodetype =arithop(Token.token);
     
-    // get the next token 
-    scan(&Token);
+    // While the token precedence is more than previous token precedence
+    while (op_precedence(nodetype) > ptp) {
 
-    // get the right branch recursivly 
-    right = binexpr();
+        // fetch next token  
+        scan(&Token);
 
-    // Create a tree with both left and right 
-    node = mkastnode(nodetype,0,left,right);
-    return node;
+        // build sub tree
+        right = binexpr(OpPrec[nodetype]);
+
+        // link node together 
+        left = mkastnode(arithop(nodetype),0, right, left);
+
+
+        //update tokentype
+        nodetype = Token.token;
+        if(nodetype == T_EOF)
+            return left;
+    }
+    return left;
 }
