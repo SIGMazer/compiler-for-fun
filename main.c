@@ -56,10 +56,9 @@ int main(int argc, char *argv[])
         exit(1);
     }
     scan(&Token);
-    n = binexpr(0);
-    printf("%d", interpretAST(n));
-    generatecode(n);
-
+    genpreamble();
+    statements();
+    genpostamble();
     fclose(Outfile);
     return EXIT_SUCCESS;
 }

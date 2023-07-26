@@ -9,14 +9,14 @@
 
 // Given an AST, generate
 // assembly code
-static int genAST(struct ASTnode *n){
+int genAST(struct ASTnode *n){
     int leftreg, rightreg;
 
     // get left and right sub-tree
-    if(n->left)
+    if (n->left)
         leftreg = genAST(n->left);
-    if(n->right)
-        rightreg= genAST(n->right);
+    if (n->right)
+        rightreg = genAST(n->right);
     switch (n->op) {
         case A_ADD:
             return cgadd(leftreg, rightreg);
@@ -34,11 +34,15 @@ static int genAST(struct ASTnode *n){
     }
 }
 
-
-void generatecode(struct ASTnode *n){
-    int reg; 
-    cgpreamble();
-    reg = genAST(n);
-    cgprintint(reg);
-    cgpostamble();
+void genpreamble() {
+  cgpreamble();
+}
+void genpostamble() {
+  cgpostamble();
+}
+void genfreeregs() {
+  freeall_registers();
+}
+void genprintint(int reg) {
+  cgprintint(reg);
 }

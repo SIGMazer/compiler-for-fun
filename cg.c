@@ -49,7 +49,7 @@ void cgpreamble()
 	"\t.global\tmain\n"
 	"\t.extern\tprintf\n"
 	"\t.section\t.text\n"
-	"LC0:\t.string\t\"%d\"\n"
+	"LC0:\t.string\t\"%d\\n\\0\"\n"
 	"printint:\n"
 	"\tpush\trbp\n"
 	"\tmov\trbp, rsp\n"
