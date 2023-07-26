@@ -45,12 +45,21 @@ int main(int argc, char *argv[])
 
     init();
     
+    // open input file 
     if((Infile = fopen(argv[1],"r")) == NULL){
         fprintf(stderr,"Unable to open %s: %s\n",argv[1], strerror(errno));
+        exit(1);
+    }
+    // create output file 
+    if((Outfile = fopen("out.s","w")) == NULL){
+        fprintf(stderr,"Unable to create out.s: %s\n", strerror(errno));
         exit(1);
     }
     scan(&Token);
     n = binexpr(0);
     printf("%d", interpretAST(n));
+    generatecode(n);
+
+    fclose(Outfile);
     return EXIT_SUCCESS;
 }
