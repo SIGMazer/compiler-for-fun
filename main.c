@@ -1,11 +1,8 @@
-#include "decl.h"
 #include "defs.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #define extern_
 #include "data.h"
 #undef extern_
+#include "decl.h"
 #include <errno.h>
 
 // List of tokens
@@ -17,25 +14,11 @@ static void init(){
     Putback = '\n';
 }
 
-// loop in all token in input file 
-// and print details of each token
-static void scanfile(){
-    struct token T;
-    
-    while(scan(&T)){
-        printf("Token %s",tokstr[T.token]);
-        if(T.token == T_INT)
-            printf(", value %d", T.intvalue);
-        printf("\n");
-    }
-}
 // Print out a usage if using incurrent input 
 static void usage(char * prog){
     fprintf(stderr,"Usage: %s infile\n", prog);
     exit(1);
 }
-
-
 
 int main(int argc, char *argv[])
 {
