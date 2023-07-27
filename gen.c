@@ -26,7 +26,7 @@ int genAST(struct ASTnode *n){
             return cgmul(leftreg, rightreg);
         case A_DIVIDE:
             return cgdiv(leftreg, rightreg);
-        case A_INT:
+        case A_INTLIT:
             return cgload(n->intvalue);
         default:
             fprintf(stderr,"Unkown AST operator %d\n",n->op);

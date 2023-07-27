@@ -6,12 +6,12 @@
 #define TEXTLEN 512 
 // Tokens
 enum {
-  T_EOF, T_PLUS, T_MINUS, T_STAR, T_SLASH, T_INT, T_SEMI, T_PRINT
+  T_EOF, T_PLUS, T_MINUS, T_STAR, T_SLASH, T_INTLIT, T_SEMI, T_PRINT
 };
 
 // ASP node type 
 enum {
-    A_ADD, A_SUBTRACT, A_MULTIPLY, A_DIVIDE, A_INT
+    A_ADD, A_SUBTRACT, A_MULTIPLY, A_DIVIDE, A_INTLIT
 };
 
 // Abstract Syntax tree structure

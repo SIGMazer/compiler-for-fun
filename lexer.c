@@ -130,7 +130,7 @@ int scan(struct token *t) {
             // literal integer value in
             if (isdigit(c)) {
                 t->intvalue = scanint(c);
-                t->token = T_INT;
+                t->token = T_INTLIT;
                 break;
             } else if (isalpha(c) || '_' == c) {
                 // Read in a keyword or identifier

@@ -21,7 +21,7 @@ int interpretAST(struct ASTnode *node){
             return leftval * rightval;
         case A_DIVIDE:
             return leftval / rightval;
-        case A_INT:
+        case A_INTLIT:
             return node->intvalue;
         default:
             fprintf(stderr,"Unknown AST operator %d\n",node->op);

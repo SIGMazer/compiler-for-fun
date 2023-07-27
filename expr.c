@@ -44,8 +44,8 @@ static struct ASTnode *primary(){
     // make a leaf node for INT token
     // otherwise a syntax error for other token type 
     switch(Token.token){
-        case T_INT:
-            node = mkastleaf(A_INT, Token.intvalue);
+        case T_INTLIT:
+            node = mkastleaf(A_INTLIT, Token.intvalue);
             scan(&Token);
             return node;
         default:
