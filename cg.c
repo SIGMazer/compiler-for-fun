@@ -8,7 +8,7 @@
 
 // List of registers and freed register 
 static int freereg[4];
-static char *reglist[4] = {"r8", "r9", "r10", "r11"};
+static char *reglist[4] = { "%r8", "%r9", "%r10", "%r11" };
 
 
 // Mark all registers as free 
