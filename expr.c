@@ -40,18 +40,24 @@ int arithop(int tok) {
 // Parse primary factor and return it as AST node
 static struct ASTnode *primary(){
     struct ASTnode *node;
-
+    int id;
     // make a leaf node for INT token
     // otherwise a syntax error for other token type 
     switch(Token.token){
         case T_INTLIT:
             node = mkastleaf(A_INTLIT, Token.intvalue);
-            scan(&Token);
-            return node;
+            break;
+        case T_IDENT:
+            // check that the identifier exist
+            if((id = findglob(Text)) == -1)
+                fatals("Unknown variable", Text);
+            node = mkastleaf(A_IDENT, id);
+            break;
         default:
-            fprintf(stderr,"syntax error on line %d\n",Line);
-            exit(1);
+            fatald("syntax error, token %d\n",Token.token);
     }
+    scan(&Token);
+    return node;
 }
 
 struct ASTnode *binexpr(int ptp){

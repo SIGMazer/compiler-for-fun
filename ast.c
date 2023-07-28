@@ -14,7 +14,7 @@ struct ASTnode *mkastnode(int op, int intvalue, struct ASTnode *left,
 
     // Return a node with stored data
 
-    node->intvalue =intvalue;
+    node->v.intvalue =intvalue;
     node->op = op;
     node->left =left;
     node->right = right;

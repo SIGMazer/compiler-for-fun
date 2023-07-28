@@ -38,6 +38,7 @@ int main(int argc, char *argv[])
         fprintf(stderr,"Unable to create out.s: %s\n", strerror(errno));
         exit(1);
     }
+
     scan(&Token);
     genpreamble();
     statements();
