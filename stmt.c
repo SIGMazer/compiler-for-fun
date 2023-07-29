@@ -24,7 +24,7 @@ void print_statement(void){
 }
 
 // Parse the declaration of a variable 
-void var_declaration(void){
+static void var_declaration(void){
     // statement: 'int' identifier ';'
     //
     // identifier: T_IDENT
@@ -33,9 +33,49 @@ void var_declaration(void){
     ident();
     addglob(Text);
     genglobsym(Text);
-    semi();
 }
 
+// Parse the initialization of a variable
+void var_initialization(void){
+    // statement: 'int' identifier '=' expression ';'
+    //
+    // identifier: T_IDENT
+
+    // Ensure we have int token 
+    struct ASTnode *left, *right, *t;
+    int iden; 
+
+    // declaration part 
+    var_declaration();
+
+    // check it's been define 
+    // then make a leaf node for it 
+    if((iden = findglob(Text)) == -1)
+        fatals("Undeclared variable", Text);
+    right = mkastleaf(A_LVIDENT, iden);
+
+    // Ensure we have equal sign 
+    // if not check of semicolon and return 
+    // i.e. stop at declaration
+    if(cmatch(T_EQUALS, "=") == -1){
+        semi();
+        return;
+    }
+
+    // Parse following expression
+    left = binexpr(0);
+
+    // make an assignment tree 
+    t = mkastnode(A_ASSIGN, 0, left, right);
+
+
+    // Generate the assembly code for the assignment
+    genAST(t, -1);
+    genfreeregs();
+
+    semi();
+
+}
 void assignment_statement(void){
     // statement: identifier '=' expression 
     //
@@ -79,7 +119,7 @@ void statements(){
       print_statement();
       break;
     case T_INT:
-      var_declaration();
+      var_initialization();
       break;
     case T_IDENT:
       assignment_statement();

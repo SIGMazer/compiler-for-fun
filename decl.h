@@ -38,6 +38,7 @@ int cgloadglob(char *identifier);
 
 // misc.c
 void match(int t, char *what);
+int cmatch(int t, char *what);
 void semi(void);
 void ident(void);
 void fatal(char *s);

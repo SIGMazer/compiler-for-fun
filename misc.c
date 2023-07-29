@@ -4,8 +4,8 @@
 
 // Miscellaneous functions 
 
-
 // check if the word is a token 
+// die of not
 void match(int token, char *word){
     if(Token.token == token){
         scan(&Token);
@@ -16,6 +16,15 @@ void match(int token, char *word){
     }
 }
 
+// check if the word is a token 
+// return 1 if token found otherwise -1 
+int cmatch(int token, char *word){
+    if(Token.token == token){
+        scan(&Token);
+        return 1;
+    }
+    return -1;
+}
 // match a ';'
 void semi(){
     match(T_SEMI, ";");
