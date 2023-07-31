@@ -5,8 +5,12 @@
 
 
 // OPerator precedence for each token 
-//                    EOF  +  -   *   /  INT
-static int OpPrec[] = {0, 10, 10, 20, 20, 0};
+static int OpPrec[] = {
+  0, 10, 10,                    // T_EOF, T_PLUS, T_MINUS
+  20, 20,                       // T_STAR, T_SLASH
+  30, 30,                       // T_EQ, T_NE
+  40, 40, 40, 40                // T_LT, T_GT, T_LE, T_GE
+};
 
 // this function check that we have binary operator 
 // and manage syntax error 
@@ -20,20 +24,10 @@ static int op_precedence(int tokentype) {
 }
 
 // Convert a token into an AST operation.
-int arithop(int tok) {
-  switch (tok) {
-    case T_PLUS:
-      return (A_ADD);
-    case T_MINUS:
-      return (A_SUBTRACT);
-    case T_STAR:
-      return (A_MULTIPLY);
-    case T_SLASH:
-      return (A_DIVIDE);
-    default:
-      fprintf(stderr, "unknown token in arithop() on line %d\n", Line);
-      exit(1);
-  }
+static int arithop(int token ) {
+    if(token > T_EOF && token < T_INTLIT)
+        return token;
+    fatald("Syantax error, token", token);
 }
 
 

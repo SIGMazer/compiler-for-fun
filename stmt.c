@@ -57,7 +57,7 @@ void var_initialization(void){
     // Ensure we have equal sign 
     // if not check of semicolon and return 
     // i.e. stop at declaration
-    if(cmatch(T_EQUALS, "=") == -1){
+    if(cmatch(T_ASSIGN, "=") == -1){
         semi();
         return;
     }
@@ -93,7 +93,7 @@ void assignment_statement(void){
     right = mkastleaf(A_LVIDENT, iden);
 
     // Ensure we have equal sign 
-    match(T_EQUALS, "=");
+    match(T_ASSIGN, "=");
 
     // Parse following expression
     left = binexpr(0);

@@ -26,7 +26,7 @@ static void putback(int c){
 }
 
 // Skip the input that we don't need to use
-// i.e. whitespace, newline, taps. retrun first chanracter we need to deal with
+// i.e. whitespace, newline, taps. retrun first character we need to deal with
 static int skip(void){
     int c;
     c = next();
@@ -129,7 +129,35 @@ int scan(struct token *t) {
             t->token = T_SEMI;
             break;
         case '=':
-            t->token = T_EQUALS;
+            if((c = next()) == '=')
+                t->token = T_EQ;
+            else{
+                putback(c);
+                t->token = T_ASSIGN;
+            }
+            break;
+        case '!':
+            if((c = next()) == '=')
+                t->token = T_NE;
+            else{
+                fatalc("Unrecognised character", c);
+            }
+            break;
+        case '<':
+            if((c = next()) == '=')
+                t->token = T_LE;
+            else{
+                putback(c);
+                t->token = T_LT;
+            }
+            break;
+        case '>':
+            if((c = next()) == '=')
+                t->token = T_GE;
+            else{
+                putback(c);
+                t->token = T_GT;
+            }
             break;
         default:
 

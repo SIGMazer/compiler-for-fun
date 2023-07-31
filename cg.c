@@ -3,7 +3,7 @@
 #include "decl.h"
 
 
-// code generator for x86-64 ATNT syntax
+// code generator for x86-64 AT&T syntax
 
 
 // List of registers and freed register 
@@ -145,3 +145,18 @@ void cgglobsym(char *sym) {
   fprintf(Outfile, "\t.comm\t%s,8,8\n", sym);
 }
 
+// Compare two registers
+static int cgcompare(int r1, int r2, char *how){
+    fprintf(Outfile, "\tcmpq\t%s, %s\n",reglist[r2], reglist[r1]);
+    fprintf(Outfile, "\t%s\t%sb\n",how, reglist[r2]); // move value in flag register to r2
+    fprintf(Outfile, "\tandq\t$255, %s\n",reglist[r2]); // remove all bits in r2
+    free_register(r1);
+    return r2;
+}
+
+int cgequal(int r1, int r2) { return cgcompare(r1, r2, "sete");}
+int cgnotequal(int r1, int r2) { return cgcompare(r1, r2, "setne");}
+int cglessthan(int r1, int r2) { return cgcompare(r1, r2, "setl");}
+int cggreaterthan(int r1, int r2) { return cgcompare(r1, r2, "setg");}
+int cglessequal(int r1, int r2) { return cgcompare(r1, r2, "setle");}
+int cggreaterequal(int r1, int r2) { return cgcompare(r1, r2, "setge");}
