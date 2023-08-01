@@ -11,7 +11,8 @@ enum {
     T_EQ, T_NE, T_LT, T_GT, T_LE,T_GE,
     T_INTLIT, T_SEMI, T_ASSIGN,
     T_IDENT,
-    T_PRINT, T_INT
+    T_LBRACE, T_RBRACE, T_LPAREN, T_RPAREN,
+    T_PRINT, T_INT, T_IF, T_ELSE
 
 };
 
@@ -20,8 +21,10 @@ enum {
     A_ADD=1, A_SUBTRACT, A_MULTIPLY, A_DIVIDE,
     A_EQ, A_NE, A_LT, A_GT, A_LE, A_GE,
     A_INTLIT, A_IDENT, A_LVIDENT,
-    A_ASSIGN
+    A_ASSIGN,A_PRINT,  A_IF, A_GLUE
 };
+
+#define NOREG   -1 // when genAST function have no register to return 
 
 // Symbol table structure
 struct symtable{
@@ -32,6 +35,7 @@ struct symtable{
 struct ASTnode{
     int op;  // Operation 
     struct ASTnode *left;
+    struct ASTnode *mid;
     struct ASTnode *right;
     union{
         int intvalue; // For interger value 'A_INTLIT'

@@ -2,8 +2,8 @@
 int scan(struct token *t);
 
 // ast.c
-struct ASTnode *mkastnode(int op, int intvalue, struct ASTnode *left,
-        struct ASTnode *right);
+struct ASTnode *mkastnode(int op, struct ASTnode *left, struct ASTnode *mid,
+        struct ASTnode *right,int intvalue);
 
 struct ASTnode *mkastleaf(int op, int intvalue);
 
@@ -16,7 +16,7 @@ int interpretAST(struct ASTnode *node);
 
 
 // gen.c
-int genAST(struct ASTnode *n, int reg);
+int genAST(struct ASTnode *n, int reg, int perantASTop);
 void genpreamble();
 void genpostamble();
 void genfreeregs();
@@ -41,19 +41,27 @@ int cglessthan(int r1, int r2);
 int cggreaterthan(int r1, int r2);
 int cglessequal(int r1, int r2);
 int cggreaterequal(int r1, int r2);
+int cgcompare_and_set(int ASTop, int r1, int r2);
+int cgcompare_and_jump(int ASTop, int r1, int r2, int label);
+void cglabel(int l);
+void cgjump(int l);
 
 // misc.c
 void match(int t, char *what);
 int cmatch(int t, char *what);
 void semi(void);
 void ident(void);
+void lbrace(void);
+void rbrace(void);
+void lparen(void);
+void rparen(void);
 void fatal(char *s);
 void fatals(char *s1, char *s2);
 void fatald(char *s, int d);
 void fatalc(char *s, int c);
 
 // stmt.c
-void statements(void);
+struct ASTnode *compound_statement();
 
 //sym.c
 int addglob(char *name);

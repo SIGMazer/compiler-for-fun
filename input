@@ -1,4 +1,14 @@
-int a = 4 > 2; print a;
-int b = 2 == 2; print b;
-int c = 5 <= 2; print c;
-int w = 9 != 2; print w;
+{
+    int i = 3; 
+    int j = 5; 
+    if(j > i){
+        print i;
+    }
+
+    if(j< i){
+        print i;
+    }
+    else {
+        print j;
+    }
+}

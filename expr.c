@@ -45,6 +45,7 @@ static struct ASTnode *primary(){
             // check that the identifier exist
             if((id = findglob(Text)) == -1)
                 fatals("Unknown variable", Text);
+
             node = mkastleaf(A_IDENT, id);
             break;
         default:
@@ -63,7 +64,7 @@ struct ASTnode *binexpr(int ptp){
 
     nodetype = Token.token;
     // return just left if no left node
-    if(nodetype == T_SEMI)
+    if(nodetype == T_SEMI || nodetype == T_RPAREN)
         return left;
     
     // While the token precedence is more than previous token precedence
@@ -76,12 +77,12 @@ struct ASTnode *binexpr(int ptp){
         right = binexpr(OpPrec[nodetype]);
 
         // link node together 
-        left = mkastnode(arithop(nodetype),0, left, right);
+        left = mkastnode(arithop(nodetype),left, NULL, right, 0);
 
 
         //update tokentype
         nodetype = Token.token;
-        if(nodetype == T_SEMI)
+        if(nodetype == T_SEMI || nodetype == T_RPAREN)
             return left;
     }
     return left;

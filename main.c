@@ -41,7 +41,8 @@ int main(int argc, char *argv[])
 
     scan(&Token);
     genpreamble();
-    statements();
+    n = compound_statement(); // parse compound statement in the input 
+    genAST(n, NOREG, 0); // generate the assembly 
     genpostamble();
     fclose(Outfile);
     return EXIT_SUCCESS;
