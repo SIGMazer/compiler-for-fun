@@ -1,14 +1,7 @@
 {
-    int i = 3; 
-    int j = 5; 
-    if(j > i){
+    int i =1 ;
+    while( i < 11){
         print i;
-    }
-
-    if(j< i){
-        print i;
-    }
-    else {
-        print j;
+        i = i +1;
     }
 }

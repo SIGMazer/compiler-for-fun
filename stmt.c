@@ -133,6 +133,26 @@ struct ASTnode *if_statement(void){
 }
 
 
+struct ASTnode *while_statement(void){
+    struct ASTnode *condAST, *bodyAST;
+
+    // Ensure we have while(
+    match(T_WHILE,"while");
+    lparen();
+
+    // Parse the following expression
+    // and ')'
+    condAST = binexpr(0);
+    if(condAST->op < A_EQ || condAST->op > A_GE)
+        fatal("Bad comparison operator");
+    rparen();
+    
+    // Parse compound statements
+    bodyAST = compound_statement();
+
+    return mkastnode(A_WHILE, condAST,NULL, bodyAST,0);
+}
+
 static struct ASTnode *assignment_statement(void){
     // statement: identifier '=' expression 
     //
@@ -177,6 +197,9 @@ struct ASTnode *compound_statement(){
         switch (Token.token) {
             case T_PRINT:
                 tree =print_statement();
+                break;
+            case T_WHILE:
+                tree =while_statement();
                 break;
             case T_INT:
                 tree =var_initialization();

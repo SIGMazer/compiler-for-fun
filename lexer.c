@@ -100,6 +100,9 @@ static int keyword(char *s){
         case 'e':
             if(!strcmp(s, "else"))
                 return T_ELSE;
+        case 'w':
+            if(!strcmp(s, "while"))
+                return T_WHILE;
     }
     return 0;
 }
