@@ -1,5 +1,5 @@
 comp: 
-	gcc -o cm -g *.c
+	gcc -o cm -g ./src/*.c
 
 test: comp
 	./cm input 
