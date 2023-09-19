@@ -111,6 +111,14 @@ int genAST(struct ASTnode *n, int reg, int parentASTop) {
             genAST(n->right, NOREG, n->op);
             genfreeregs();
             return (NOREG);
+        case A_FUNCTION:
+            // Generate the prologue
+            cgfuncpreamble(Gsym[n->v.id].name);
+            // Generate the code for the function body
+            genAST(n->left, NOREG, n->op);
+            // Generate the epilogue
+            cgfuncpostamble();
+            return (NOREG);
     }
 
     // General AST node handling below

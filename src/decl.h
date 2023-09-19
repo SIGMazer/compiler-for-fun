@@ -45,6 +45,8 @@ int cgcompare_and_set(int ASTop, int r1, int r2);
 int cgcompare_and_jump(int ASTop, int r1, int r2, int label);
 void cglabel(int l);
 void cgjump(int l);
+void cgfuncpreamble(char *name);
+void cgfuncpostamble();
 
 // misc.c
 void match(int t, char *what);
@@ -63,6 +65,7 @@ void fatalc(char *s, int c);
 // stmt.c
 struct ASTnode *compound_statement();
 struct ASTnode *single_statement(void);
+struct ASTnode *function_declaration(void);
 
 //sym.c
 int addglob(char *name);

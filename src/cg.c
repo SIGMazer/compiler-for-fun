@@ -60,10 +60,21 @@ void cgpreamble() {
 	"\tnop\n"
 	"\tleave\n"
 	"\tret\n"
-	"\n"
-	"\t.globl\tmain\n"
-	"\t.type\tmain, @function\n"
-	"main:\n" "\tpushq\t%rbp\n" "\tmovq	%rsp, %rbp\n", Outfile);
+	"\n", Outfile);
+}
+
+// print function preamble
+void cgfuncpreamble(char *name){
+    fprintf(Outfile, "\t.globl\t%s\n", name);
+    fprintf(Outfile, "\t.type\t%s, @function\n", name);
+    fprintf(Outfile, "%s:\n", name);
+    fprintf(Outfile, "\tpushq\t%%rbp\n");
+    fprintf(Outfile, "\tmovq\t%%rsp, %%rbp\n");
+}
+
+// print function postamble
+void cgfuncpostamble(){
+    fputs("\tmovl	$0, %eax\n" "\tpopq	%rbp\n" "\tret\n", Outfile);
 }
 
 // Print out the assembly postamble

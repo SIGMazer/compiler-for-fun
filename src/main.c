@@ -41,9 +41,16 @@ int main(int argc, char *argv[])
 
     scan(&Token);
     genpreamble();
-    n = compound_statement(); // parse compound statement in the input 
-    genAST(n, NOREG, 0); // generate the assembly 
-    genpostamble();
+    while(1){
+        // Pares a function and genrate the assembly code for it
+        n = function_declaration(); 
+        genAST(n, NOREG, 0);
+        // Stop at EOF
+        if(Token.token == T_EOF)
+            break;
+
+    }
+
     fclose(Outfile);
     return EXIT_SUCCESS;
 }

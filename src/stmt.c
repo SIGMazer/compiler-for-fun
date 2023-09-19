@@ -97,6 +97,27 @@ static struct ASTnode *var_initialization(void){
 
 }
 
+// Parse Function declaration
+// and return its AST
+struct ASTnode *function_declaration(void){
+    struct ASTnode *tree;
+    int nameslot;
+
+    // Find void identifier and '(' ')'
+    match(T_VOID, "void");
+    ident();
+    nameslot = addglob(Text);
+    lparen();
+    rparen();
+
+    // Parse compound statements
+    tree = compound_statement();
+
+    // Return a A_FUNCTION tree 
+    return mkastunary(A_FUNCTION, nameslot, tree);
+
+}
+
 // Parse an IF statement including 
 // any ELSE clause return its AST
 struct ASTnode *if_statement(void){
