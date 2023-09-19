@@ -62,6 +62,7 @@ void fatalc(char *s, int c);
 
 // stmt.c
 struct ASTnode *compound_statement();
+struct ASTnode *single_statement(void);
 
 //sym.c
 int addglob(char *name);

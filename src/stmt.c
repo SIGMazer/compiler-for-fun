@@ -46,9 +46,6 @@ static struct ASTnode *print_statement(void) {
   // Make an print AST tree
   tree = mkastunary(A_PRINT, 0, tree);
 
-  // Match the following semicolon
-  // and return the AST
-  semi();
   return (tree);
 }
 // Parse the declaration of a variable 
@@ -96,8 +93,6 @@ static struct ASTnode *var_initialization(void){
     // make an assignment tree 
     t = mkastnode(A_ASSIGN, left, NULL,  right, 0);
 
-
-    semi();
     return t;
 
 }
@@ -173,16 +168,94 @@ static struct ASTnode *assignment_statement(void){
     match(T_ASSIGN, "=");
 
     // Parse following expression
-    left = binexpr(0);
-
-    // make an assignment tree 
+    left = binexpr(0); // make an assignment tree 
     t = mkastnode(A_ASSIGN, left, NULL,  right, 0);
 
 
-    semi();
 
     return t;
 
+}
+
+// Parse a FOR loop statement 
+// return its AST
+struct ASTnode *for_statement(void){
+    // statement: 'for' '(' assignment_statement ';' true_false_expression ';' assignment_statement ')' compound_statement
+    // assignment_statement: identifier '=' expression ';'
+    // true_false_expression: expression ('<' | '>' | '<=' | '>=' | '==' | '!=') expression
+    // compound_statement: '{' statements '}'
+    //
+    //  retrun AST
+    // seqASR;
+    // while(true_false_expression){
+    //    compound_statement;
+    //    incrAST;
+    // }
+    //
+    struct ASTnode *tree, *condAST, *bodyAST, *incrAST, *seqAST;
+
+    // Ensure we have for(
+    match(T_FOR, "for");
+    lparen();
+
+    // Get preoperation
+    seqAST = single_statement(); 
+    semi();
+
+    // Parse the following expression
+    // and ensure the tree's operation is comparison 
+    condAST = binexpr(0);
+
+    if(condAST->op < A_EQ || condAST->op > A_GE)
+        fatal("Bad comparison operator");
+    semi();
+
+    // Parse the following expression
+    // and ')'
+    incrAST = single_statement();
+    rparen();
+
+    // Parse compound statements
+    bodyAST = compound_statement();
+
+    // Build and return the AST for this statement
+    tree = mkastnode(A_GLUE, bodyAST, NULL, incrAST, 0);
+
+    tree = mkastnode(A_WHILE, condAST, NULL, tree, 0);
+     
+    return mkastnode(A_GLUE, seqAST, NULL, tree, 0);
+
+}
+
+
+// Parse single statements 
+// and return its AST 
+struct ASTnode *single_statement(void){
+    struct ASTnode *tree = NULL;
+
+    switch (Token.token) {
+        case T_PRINT:
+            tree =print_statement();
+            break;
+        case T_WHILE:
+            tree =while_statement();
+            break;
+        case T_INT:
+            tree =var_initialization();
+            break;
+        case T_IDENT:
+            tree =assignment_statement();
+            break;
+        case T_IF:
+            tree = if_statement();
+            break;
+        case T_FOR:
+            tree = for_statement();
+            break;
+        default:
+            fatald("Syntax error, token", Token.token);
+    }
+    return tree;
 }
 
 // Parse statements
@@ -194,30 +267,14 @@ struct ASTnode *compound_statement(){
     lbrace();
 
     for(;;){
-        switch (Token.token) {
-            case T_PRINT:
-                tree =print_statement();
-                break;
-            case T_WHILE:
-                tree =while_statement();
-                break;
-            case T_INT:
-                tree =var_initialization();
-                break;
-            case T_IDENT:
-                tree =assignment_statement();
-                break;
-            case T_IF:
-                tree = if_statement();
-                break;
-            case T_RBRACE:
-                // when we hit right curly bracket 
-                // skip it and return the ast 
-                rbrace();
-                return left; 
-            default:
-                fatald("Syntax error, token", Token.token);
-        }
+        
+        // Parse single statements
+        tree = single_statement();
+
+        // statements that must be followed by semicolon
+        if(tree && (tree->op == A_PRINT || tree->op == A_ASSIGN)) 
+            semi();
+        
         // for each new tree, either save it in left 
         // if left is empty of glue the left and the 
         // new tree together 
@@ -226,6 +283,13 @@ struct ASTnode *compound_statement(){
                 left = tree ;
             else
                 left = mkastnode(A_GLUE, left, NULL, tree, 0);
+        }
+
+        // If we hit a right curly bracket, skip it
+        // and return the AST we've built up so far
+        if(Token.token == T_RBRACE){
+            rbrace();
+            return left;
         }
 
     }
